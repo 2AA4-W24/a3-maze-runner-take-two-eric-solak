@@ -65,7 +65,7 @@ public class Maze {
      */
     private Position findEnd() throws Exception {
         for (int i = 0; i < maze.size(); i++) {
-            Position pos = new Position(maze.getFirst().size() - 1, i);
+            Position pos = new Position(maze.get(0).size() - 1, i);
             if (!isWall(pos)) {
                 return pos;
             }
@@ -107,7 +107,7 @@ public class Maze {
      * @return Horizontal size
      */
     public int getSizeX() {
-        return this.maze.getFirst().size();
+        return this.maze.get(0).size();
     }
 
     /**

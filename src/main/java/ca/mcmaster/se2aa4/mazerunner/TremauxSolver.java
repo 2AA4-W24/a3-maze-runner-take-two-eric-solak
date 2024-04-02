@@ -40,7 +40,7 @@ public class TremauxSolver implements MazeSolver {
                 newPos = previousPos;
             } else if (neighbors.size() == 1) {
                 // Move forward
-                newPos = neighbors.getFirst();
+                newPos = neighbors.get(0);
             } else {
                 // At junction
                 Position fewestMarks = pickNeighbor(neighbors);
@@ -90,7 +90,7 @@ public class TremauxSolver implements MazeSolver {
      */
     private Position pickNeighbor(List<Position> neighbors) {
         neighbors.sort(Comparator.comparingInt(pos -> marks[pos.y()][pos.x()]));
-        return neighbors.getFirst();
+        return neighbors.get(0);
     }
 
     /**
