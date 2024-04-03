@@ -16,9 +16,10 @@ public class Main {
         try {
             cmd = parser.parse(getParserOptions(), args);
             String filePath = cmd.getOptionValue('i');
-            Maze maze = new Maze(filePath);
+
 
             if (cmd.getOptionValue("p") != null) {
+                Maze maze = new Maze(filePath);
                 logger.info("Validating path");
                 Path path = new Path(cmd.getOptionValue("p"));
                 if (maze.validatePath(path)) {
@@ -28,8 +29,31 @@ public class Main {
                 }
             } else {
                 String method = cmd.getOptionValue("method", "righthand");
-                Path path = solveMaze(method, maze);
-                System.out.println(path.getFactorizedForm());
+                if (cmd.getOptionValue("baseline") == null) {
+                    Maze maze = new Maze(filePath);
+                    Path path = solveMaze(method, maze);
+                    System.out.println(path.getFactorizedForm());
+                } else {
+                    String baseline = cmd.getOptionValue("baseline");
+
+                    float mazeStart = System.nanoTime();
+                    Maze maze = new Maze(filePath);
+                    float mazeEnd = System.nanoTime();
+                    System.out.printf("Time to load maze: %.2f milliseconds\n", (mazeEnd - mazeStart) / 1e6);
+
+                    float methodStart = System.nanoTime();
+                    Path methodPath = solveMaze(method, maze);
+                    float methodEnd = System.nanoTime();
+                    System.out.printf("Time to solve using %s: %.2f milliseconds\n", method, (methodEnd - methodStart) / 1e6);
+
+                    float baselineStart = System.nanoTime();
+                    Path baselinePath = solveMaze(baseline, maze);
+                    float baseLineEnd = System.nanoTime();
+                    System.out.printf("Time to solve using %s: %.2f milliseconds\n", baseline, (baseLineEnd - baselineStart) / 1e6);
+
+                    float pathSpeedup = comparePathLengths(baselinePath, methodPath);
+                    System.out.printf("Speedup of path: %.2f\n", pathSpeedup);
+                }
             }
         } catch (Exception e) {
             System.err.println("MazeSolver failed.  Reason: " + e.getMessage());
@@ -49,7 +73,7 @@ public class Main {
      * @throws Exception If provided method does not exist
      */
     private static Path solveMaze(String method, Maze maze) throws Exception {
-        MazeSolver solver = null;
+        MazeSolver solver;
         switch (method) {
             case "righthand" -> {
                 logger.debug("RightHand algorithm chosen.");
@@ -72,6 +96,13 @@ public class Main {
         return solver.solve(maze);
     }
 
+    private static float comparePathLengths(Path baseline, Path method) {
+        AlgorithmComparer comparer = new AlgorithmComparer();
+
+        return comparer.compareLength(baseline, method);
+    }
+
+
     /**
      * Get options for CLI parser.
      *
@@ -86,6 +117,7 @@ public class Main {
 
         options.addOption(new Option("p", true, "Path to be verified in maze"));
         options.addOption(new Option("method", true, "Specify which path computation algorithm will be used"));
+        options.addOption(new Option("baseline", true, "Compare the speedup of algorithms to solve the maze"));
 
         return options;
     }
