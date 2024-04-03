@@ -85,8 +85,13 @@ public class BFSSolver implements MazeSolver{
             }
         }
 
+
         PathInfo end = hashMap.get(maze.getEnd());
-        return end.getPath();
+        if (end != null) {
+            return end.getPath();
+        } else {
+            throw new RuntimeException("Invalid maze.");
+        }
     }
 
     /**
