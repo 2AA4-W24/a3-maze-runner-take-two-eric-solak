@@ -17,7 +17,7 @@ public class BFSSolver implements MazeSolver{
     public Path solve(Maze maze) {
         this.maze = maze;
         this.queue = new LinkedList<>();
-        marked = new boolean[maze.getSizeY()][maze.getSizeX()];
+        marked = new boolean[maze.getSizeX()][maze.getSizeY()];
         logger.debug("Tracing path...");
         return tracePath();
     }
@@ -49,7 +49,7 @@ public class BFSSolver implements MazeSolver{
             Direction currentDir = currentPathInfo.getDirection();
             Path currentPath = currentPathInfo.getPath();
 
-            for (Compass compass : Compass.values()) { //
+            for (Compass compass : Compass.values()) {
                 Path newPath = copyPath(currentPath);
                 Position nextPos = pos;
                 Direction nextDir = currentDir;
