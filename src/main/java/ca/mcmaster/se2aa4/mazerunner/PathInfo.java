@@ -1,19 +1,9 @@
 package ca.mcmaster.se2aa4.mazerunner;
 
-public class PathInfo {
-    private Path path;
-    private Direction direction;
-
-    public PathInfo(Path path, Direction direction) {
-        this.path = path;
-        this.direction = direction;
-    }
-
-    public Path getPath() {
-        return this.path;
-    }
-
-    public Direction getDirection() {
-        return this.direction;
-    }
+/**
+ * Holds information about the current Path:
+ * - Path taken
+ * - Current direction of the last position
+ */
+public record PathInfo(Path path, Direction direction) {
 }

@@ -9,9 +9,9 @@ public class BFSSolver implements MazeSolver{
     private static final Logger logger = LogManager.getLogger();
     private boolean[][] marked;
     private Queue<Position> queue;
-    private Map<Position, PathInfo> hashMap = new HashMap<>();
+    private final Map<Position, PathInfo> hashMap = new HashMap<>();
     private Maze maze;
-    private enum Compass {LEFT, RIGHT, FORWARD};
+    private enum Compass {LEFT, RIGHT, FORWARD}
 
     @Override
     public Path solve(Maze maze) {
@@ -42,12 +42,12 @@ public class BFSSolver implements MazeSolver{
             // The path returned will always be the shortest, due to the logistics of Breadth First Search
             if (pos.x() == maze.getSizeX()) {
                 PathInfo end = hashMap.get(maze.getEnd());
-                return end.getPath();
+                return end.path();
             }
 
             PathInfo currentPathInfo = hashMap.get(pos);
-            Direction currentDir = currentPathInfo.getDirection();
-            Path currentPath = currentPathInfo.getPath();
+            Direction currentDir = currentPathInfo.direction();
+            Path currentPath = currentPathInfo.path();
 
             for (Compass compass : Compass.values()) {
                 Path newPath = copyPath(currentPath);
@@ -88,7 +88,7 @@ public class BFSSolver implements MazeSolver{
 
         PathInfo end = hashMap.get(maze.getEnd());
         if (end != null) {
-            return end.getPath();
+            return end.path();
         } else {
             throw new RuntimeException("Invalid maze.");
         }
