@@ -19,13 +19,18 @@ public class Main {
 
 
             if (cmd.getOptionValue("p") != null) {
-                Maze maze = new Maze(filePath);
-                logger.info("Validating path");
-                Path path = new Path(cmd.getOptionValue("p"));
-                if (maze.validatePath(path)) {
-                    System.out.println("correct path");
-                } else {
-                    System.out.println("incorrect path");
+                if (cmd.getOptionValue("baseline") == null) {
+                    Maze maze = new Maze(filePath);
+                    logger.info("Validating path");
+                    Path path = new Path(cmd.getOptionValue("p"));
+                    if (maze.validatePath(path)) {
+                        System.out.println("correct path");
+                    } else {
+                        System.out.println("incorrect path");
+                    }
+                }
+                else {
+                    System.out.println("MazeSolver failed. Reason: Invalid input");
                 }
             } else {
                 String method = cmd.getOptionValue("method", "righthand");
