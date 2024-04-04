@@ -31,8 +31,8 @@ public record Position(int x, int y) {
             case RIGHT -> {
                 return this.add(new Position(1, 0));
             }
+            default -> throw new IllegalStateException("Unexpected value: " + this);
         }
-        throw new IllegalStateException("Unexpected value: " + this);
     }
 
     @Override

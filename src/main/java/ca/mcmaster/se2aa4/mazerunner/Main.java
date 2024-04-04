@@ -12,7 +12,7 @@ public class Main {
         logger.info("** Starting Maze Runner");
         CommandLineParser parser = new DefaultParser();
 
-        CommandLine cmd = null;
+        CommandLine cmd;
         try {
             cmd = parser.parse(getParserOptions(), args);
             String filePath = cmd.getOptionValue('i');
@@ -51,14 +51,16 @@ public class Main {
                     float baseLineEnd = System.nanoTime();
                     System.out.printf("Time to solve using %s: %.2f milliseconds\n", baseline, (baseLineEnd - baselineStart) / 1e6);
 
-                    float pathSpeedup = comparePathLengths(baselinePath, methodPath);
+                    float pathSpeedup = baselinePath.compareLength(methodPath);
                     System.out.printf("Speedup of path: %.2f\n", pathSpeedup);
                 }
             }
         } catch (Exception e) {
             System.err.println("MazeSolver failed.  Reason: " + e.getMessage());
-            logger.error("MazeSolver failed.  Reason: " + e.getMessage());
-            logger.error("PATH NOT COMPUTED");
+            if (logger.isErrorEnabled()) {
+                logger.error("MazeSolver failed.  Reason: " + e.getMessage());
+                logger.error("PATH NOT COMPUTED");
+            }
         }
 
         logger.info("End of MazeRunner");
@@ -87,21 +89,12 @@ public class Main {
                 logger.debug("Breadth First Search algorithm chosen.");
                 solver = new BFSSolver();
             }
-            default -> {
-                throw new Exception("Maze solving method '" + method + "' not supported.");
-            }
+            default -> throw new Exception("Maze solving method '" + method + "' not supported.");
         }
 
         logger.info("Computing path");
         return solver.solve(maze);
     }
-
-    private static float comparePathLengths(Path baseline, Path method) {
-        AlgorithmComparer comparer = new AlgorithmComparer();
-
-        return comparer.compareLength(baseline, method);
-    }
-
 
     /**
      * Get options for CLI parser.

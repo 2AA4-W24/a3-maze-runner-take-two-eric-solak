@@ -106,7 +106,7 @@ public class Path {
         for (int i = 0; i < path.size(); i++) {
             Character current = path.get(i);
             int count = 0;
-            while (i < path.size() && current == path.get(i)) {
+            while (i < path.size() && current.equals(path.get(i))) {
                 count++;
                 i++;
             }
@@ -125,5 +125,19 @@ public class Path {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Compares the length of two Paths
+     *
+     * @param method Path to compare by
+     * @return The ratio of the two Path lengths
+     */
+    public float compareLength(Path method) {
+        int baselineLength = this.path.size();
+        List<Character> methodSteps = method.getPathSteps();
+        int methodLength = methodSteps.size();
+
+        return (float) baselineLength / methodLength;
     }
 }
