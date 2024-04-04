@@ -1,6 +1,6 @@
 # Assignment A3 - Maze Runner Take Two
 
-- Authors:
+- **Authors:**
     - [Alexandre Lachance](lachaa2@mcmaster.ca)
     - [Sébastien Mosser](mossers@mcmaster.ca)
     - [Eric Solak](solake@mcmaster.ca)
